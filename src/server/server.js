@@ -19,7 +19,7 @@ const { getUserById } = require('../service/userService');
 
   server.auth.strategy('jwt', 'jwt',
     { key: process.env.SECRET_KEY,
-      validate: (decoded, request, h) => {
+      validate: (decoded) => {
         if (!getUserById(decoded.id)) {
           return { isValid: false };
         }

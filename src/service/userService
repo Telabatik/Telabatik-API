@@ -4,6 +4,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 async function registerUser(userData) {
+  if (!isUserAvailable(userData.username, userData.email)) {
+    console.log("Username or email not available");
+    return null;
+  }
+
   const newUser = {
     id: crypto.randomUUID(),
     username: userData.username,
@@ -15,6 +20,11 @@ async function registerUser(userData) {
   console.log(users);
   
   return trimUserObject({ ...newUser });
+}
+
+function isUserAvailable(username, email) {
+  const existingUser = users.filter((user) => (user.username === username) || (user.email === email))
+  return existingUser.length === 0;
 }
 
 async function loginUser(userData) {

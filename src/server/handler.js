@@ -42,7 +42,6 @@ async function registerHandler(request, h) {
 async function loginHandler(request, h) {
   const userData = request.payload;
   const loggedIn = await loginUser(userData);
-  console.log("login done");
 
   if (!loggedIn) {
     const response = h.response({
