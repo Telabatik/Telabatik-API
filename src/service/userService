@@ -19,7 +19,9 @@ async function registerUser(userData) {
   users.push(newUser);
   console.log(users);
   
-  return trimUserObject({ ...newUser });
+  return {
+    user: trimUserObject({ ...newUser })
+  };
 }
 
 function isUserAvailable(username, email) {

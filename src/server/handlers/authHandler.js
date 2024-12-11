@@ -1,17 +1,4 @@
-const { registerUser, loginUser } = require('../service/userService');
-
-async function indexHandler(request, h) {
-  const response = h.response({
-    status: 'success',
-    message: 'Reached Telabatik API Service.',
-    data: {
-      accessedAt: new Date().toISOString()
-    }
-  });
-
-  response.code(200);
-  return response;
-}
+const { registerUser, loginUser } = require('../../service/userService');
 
 async function registerHandler(request, h) {
   const userData = request.payload;
@@ -79,4 +66,4 @@ async function testValidationHandler(request, h) {
   return response;
 }
 
-module.exports = { indexHandler, registerHandler, loginHandler, testValidationHandler };
+module.exports = { registerHandler, loginHandler, testValidationHandler };

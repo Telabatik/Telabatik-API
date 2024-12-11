@@ -1,12 +1,6 @@
-const { indexHandler, registerHandler, loginHandler, testValidationHandler } = require('../server/handler');
- 
+const { registerHandler, loginHandler, testValidationHandler } = require('../handlers/authHandler');
+
 const routes = [
-  {
-    path: '/',
-    method: 'GET',
-    handler: indexHandler,
-    config: { auth: false }
-  },
   {
     path: '/auth/register',
     method: 'POST',
@@ -25,5 +19,5 @@ const routes = [
     handler: testValidationHandler,
   }
 ];
- 
+
 module.exports = routes;
