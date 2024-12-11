@@ -1,4 +1,5 @@
 const authRoutes = require('../routes/authRoutes');
+const predictionRoutes = require('../routes/predictionRoutes');
  
 const routes = [
   {
@@ -18,7 +19,8 @@ const routes = [
     },
     config: { auth: false }
   },
-  ...authRoutes
+  ...authRoutes,
+  ...predictionRoutes
 ];
  
 module.exports = routes;

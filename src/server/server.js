@@ -3,6 +3,7 @@ require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const routes = require('../server/routes/routes');
 const { getUserById } = require('../service/userService');
+const { loadModel } = require('../service/inferenceService');
 
 (async () => {
   const server = Hapi.server({
@@ -14,6 +15,9 @@ const { getUserById } = require('../service/userService');
       }
     }
   });
+
+  const model = await loadModel();
+  server.app.model = model;
 
   await server.register(require('hapi-auth-jwt2'));
 
