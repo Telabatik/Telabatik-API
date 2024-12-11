@@ -1,0 +1,44 @@
+const users = require('../server/users');
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+
+async function registerUser(userData) {
+  const newUser = {
+    id: crypto.randomUUID(),
+    username: userData.username,
+    email: userData.email,
+    password: await bcrypt.hash(userData.password, 10)
+  }
+
+  users.push(newUser);
+  console.log(users);
+  
+  return trimUserObject({ ...newUser });
+}
+
+async function loginUser(userData) {
+  const user = users.find((user) => user.username === userData.username);
+  console.log("find user done");
+  
+  if (!user) {
+    console.log("not user");
+    return null;
+  }
+
+  if (!await bcrypt.compare(userData.password, user.password)) {
+    console.log("pass");
+    return null;
+  }
+
+  return trimUserObject({ ...user });
+}
+
+function trimUserObject(user) {
+  if (user) {
+    delete user.password;
+  }
+
+  return user;
+}
+
+module.exports = { registerUser, loginUser };
