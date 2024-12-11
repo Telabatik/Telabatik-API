@@ -1,6 +1,7 @@
 const users = require('../server/users');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 async function registerUser(userData) {
   const newUser = {
@@ -18,19 +19,21 @@ async function registerUser(userData) {
 
 async function loginUser(userData) {
   const user = users.find((user) => user.username === userData.username);
-  console.log("find user done");
   
   if (!user) {
-    console.log("not user");
+    console.log("User not found");
     return null;
   }
 
   if (!await bcrypt.compare(userData.password, user.password)) {
-    console.log("pass");
+    console.log("Incorrect password");
     return null;
   }
 
-  return trimUserObject({ ...user });
+  return {
+    user: trimUserObject({ ...user }),
+    token: jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: '1h' })
+  };
 }
 
 function trimUserObject(user) {
@@ -41,4 +44,8 @@ function trimUserObject(user) {
   return user;
 }
 
-module.exports = { registerUser, loginUser };
+function getUserById(id) {
+  return users.find((user) => user.id === id);
+}
+
+module.exports = { registerUser, loginUser, getUserById };

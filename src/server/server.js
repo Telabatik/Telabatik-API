@@ -1,5 +1,8 @@
+require('dotenv').config();
+
 const Hapi = require('@hapi/hapi');
 const routes = require('../server/routes');
+const { getUserById } = require('../service/userService');
 
 (async () => {
   const server = Hapi.server({
@@ -11,6 +14,21 @@ const routes = require('../server/routes');
       }
     }
   });
+
+  await server.register(require('hapi-auth-jwt2'));
+
+  server.auth.strategy('jwt', 'jwt',
+    { key: process.env.SECRET_KEY,
+      validate: (decoded, request, h) => {
+        if (!getUserById(decoded.id)) {
+          return { isValid: false };
+        }
+      
+        return { isValid: true };
+      }
+    });
+
+  server.auth.default('jwt');
 
   server.route(routes);
 

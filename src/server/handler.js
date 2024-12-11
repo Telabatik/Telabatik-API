@@ -66,4 +66,18 @@ async function loginHandler(request, h) {
   return response;
 }
 
-module.exports = { indexHandler, registerHandler, loginHandler };
+async function testValidationHandler(request, h) {
+  const response = h.response({
+    status: 'success',
+    message: 'Token validation successful. User ID: ' + request.auth.credentials.id,
+    data: {
+      accessedAt: new Date().toISOString()
+    }
+  });
+
+  response.header("Authorization", request.headers.authorization);
+  response.code(200);
+  return response;
+}
+
+module.exports = { indexHandler, registerHandler, loginHandler, testValidationHandler };
