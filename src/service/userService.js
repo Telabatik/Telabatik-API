@@ -19,9 +19,7 @@ async function registerUser(userData) {
 
   await storeUser(id, newUser);
   
-  return {
-    user: trimUserObject({ ...newUser })
-  };
+  return trimUserObject({ ...newUser });
 }
 
 async function loginUser(userData) {
@@ -37,10 +35,7 @@ async function loginUser(userData) {
     return null;
   }
 
-  return {
-    user: trimUserObject({ ...user }),
-    token: jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: '1h' })
-  };
+  return Object.assign(trimUserObject({ ...user }), { token: jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: '180d' }) });
 }
 
 function trimUserObject(user) {
