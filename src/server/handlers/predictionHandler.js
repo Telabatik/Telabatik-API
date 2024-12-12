@@ -1,7 +1,7 @@
 const path = require('path');
 const { uploadScanImage } = require('../../service/cloudStorageService');
 const { storeUserScanHistory, fetchUserScanHistory } = require('../../service/firestoreService');
-const { inferClassification } = require('../../service/inferenceService')
+const { inferClassification } = require('../../service/inferenceService');
 const crypto = require('crypto');
 
 async function predictHandler(request, h) {

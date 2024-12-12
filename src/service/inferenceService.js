@@ -6,10 +6,10 @@ function loadModel() {
 }
 
 async function inferClassification(model, image) {
-  const tensor = tf.node.decodeJpeg(image, ratio=1/2)
-  .resizeNearestNeighbor([224, 224])
-  .expandDims()
-  .toFloat()
+  const tensor = tf.node.decodeJpeg(image)
+    .resizeNearestNeighbor([224, 224])
+    .expandDims()
+    .toFloat();
 
   const prediction = model.predict(tensor);
   const score = await prediction.data();

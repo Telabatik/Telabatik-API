@@ -10,7 +10,7 @@ const routes = [
         allow: 'multipart/form-data',
         multipart: true,
         output: 'stream',
-				parse: true
+        parse: true
       }
     },
   },

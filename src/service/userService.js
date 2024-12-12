@@ -1,4 +1,3 @@
-const users = require('../server/users');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -16,7 +15,7 @@ async function registerUser(userData) {
     username: userData.username,
     email: userData.email,
     password: await bcrypt.hash(userData.password, 10)
-  }
+  };
 
   await storeUser(id, newUser);
   
@@ -26,7 +25,7 @@ async function registerUser(userData) {
 }
 
 async function loginUser(userData) {
-  const user = await fetchUserByUsername(userData.username)
+  const user = await fetchUserByUsername(userData.username);
   
   if (!user) {
     console.log("User not found");

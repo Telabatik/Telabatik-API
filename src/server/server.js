@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const Hapi = require('@hapi/hapi');
 const routes = require('../server/routes/routes');
-const { getUserById } = require('../service/userService');
 const { loadModel } = require('../service/inferenceService');
 const { fetchUserById } = require('../service/firestoreService');
 

@@ -11,7 +11,7 @@ async function isUserAvailable(username, email) {
   const userSnapshot = await userCollection.where(Filter.or(
     Filter.where('username', '==', username),
     Filter.where('email', '==', email)
-  )).get()
+  )).get();
   return userSnapshot.empty;
 }
 
