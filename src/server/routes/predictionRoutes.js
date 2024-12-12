@@ -1,4 +1,4 @@
-const { predictHandler } = require('../handlers/predictionHandler');
+const { predictHandler, predictHistoryHandler } = require('../handlers/predictionHandler');
 
 const routes = [
   {
@@ -9,9 +9,13 @@ const routes = [
       payload: {
         allow: 'multipart/form-data',
         multipart: true,
-      },
-      auth: false
+      }
     },
+  },
+  {
+    path: '/predict/history',
+    method: 'GET',
+    handler: predictHistoryHandler
   }
 ];
 

@@ -1,3 +1,4 @@
+const { storeUserScanHistory, fetchUserScanHistory } = require('../../service/firestoreService');
 const { inferClassification } = require('../../service/inferenceService')
 const crypto = require('crypto');
 
@@ -14,6 +15,8 @@ async function predictHandler(request, h) {
     "confidenceScore": confidenceScore
   };
 
+  await storeUserScanHistory(request.auth.credentials.id, data);
+
   const response = h.response({
     status: 'success',
     message: 'Model predicted successfully.',
@@ -24,4 +27,17 @@ async function predictHandler(request, h) {
   return response;
 }
 
-module.exports = { predictHandler };
+async function predictHistoryHandler(request, h) {
+  const data = await fetchUserScanHistory(request.auth.credentials.id);
+
+  const response = h.response({
+    status: 'success',
+    message: 'User scan history retrieved successfully.',
+    data
+  });
+  
+  response.code(200);
+  return response;
+}
+
+module.exports = { predictHandler, predictHistoryHandler };

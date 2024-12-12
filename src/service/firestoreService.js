@@ -24,7 +24,7 @@ async function fetchUserByUsername(username) {
   const userDoc = userSnapshot.docs.find(doc => {
     return doc.data().username === username;
   });
-  console.log(userDoc.data());
+
   return userDoc.data();
 }
 
@@ -33,4 +33,16 @@ async function fetchUserById(id) {
   return userDoc.data();
 }
 
-module.exports = { storeUser, isUserAvailable, fetchUserByUsername, fetchUserById };
+async function storeUserScanHistory(userId, data) {
+  const userDoc = await db.collection('users').doc(userId);
+  const scanHistorySub = userDoc.collection('scanHistory');
+  return scanHistorySub.doc(data.id).set(data);
+}
+
+async function fetchUserScanHistory(userId) {
+  const userDoc = await db.collection('users').doc(userId);
+  const scanHistorySnapshot = await userDoc.collection('scanHistory').get();
+  return scanHistorySnapshot.docs.map((doc) => doc.data());
+}
+
+module.exports = { storeUser, isUserAvailable, fetchUserByUsername, fetchUserById, storeUserScanHistory, fetchUserScanHistory };
