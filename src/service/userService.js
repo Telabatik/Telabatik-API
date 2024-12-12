@@ -1,36 +1,29 @@
-const users = require('../server/users');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { storeUser, isUserAvailable, fetchUserByUsername } = require('../service/firestoreService');
 
 async function registerUser(userData) {
-  if (!isUserAvailable(userData.username, userData.email)) {
+  if (!(await isUserAvailable(userData.username, userData.email))) {
     console.log("Username or email not available");
     return null;
   }
 
+  const id = crypto.randomUUID();
   const newUser = {
-    id: crypto.randomUUID(),
+    id: id,
     username: userData.username,
     email: userData.email,
     password: await bcrypt.hash(userData.password, 10)
-  }
-
-  users.push(newUser);
-  console.log(users);
-  
-  return {
-    user: trimUserObject({ ...newUser })
   };
-}
 
-function isUserAvailable(username, email) {
-  const existingUser = users.filter((user) => (user.username === username) || (user.email === email))
-  return existingUser.length === 0;
+  await storeUser(id, newUser);
+  
+  return trimUserObject({ ...newUser });
 }
 
 async function loginUser(userData) {
-  const user = users.find((user) => user.username === userData.username);
+  const user = await fetchUserByUsername(userData.username);
   
   if (!user) {
     console.log("User not found");
@@ -42,22 +35,14 @@ async function loginUser(userData) {
     return null;
   }
 
-  return {
-    user: trimUserObject({ ...user }),
-    token: jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: '1h' })
-  };
+  return Object.assign(trimUserObject({ ...user }), { token: jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: '180d' }) });
 }
 
 function trimUserObject(user) {
   if (user) {
     delete user.password;
   }
-
   return user;
 }
 
-function getUserById(id) {
-  return users.find((user) => user.id === id);
-}
-
-module.exports = { registerUser, loginUser, getUserById };
+module.exports = { registerUser, loginUser };
